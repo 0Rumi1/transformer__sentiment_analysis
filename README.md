@@ -90,13 +90,63 @@ from sklearn.metrics import confusion_matrix
 
 ## 사용법
 
+* 리뷰 데이터를 직접 웹크롤링 방법은 아래와 같음
+* 또는 리뷰 데이터 크롤링하여 저장한 파일을 업로드하였음, 다운로드하여 사용 가능 (dromm_google.csv) 
+```
+# !pip install google_play_scraper
+
+
+# 앱 이름 추출 
+from google_play_scraper import app
+result = app(
+    'droom.sleepIfUCan',            # 앱 id
+    lang='ko', # efaults to 'en'    # 언어 
+    country='kr' # defaults to 'us' # 국가
+)
+
+# 앱 리뷰
+from google_play_scraper import Sort, reviews_all
+result = reviews_all(
+    'droom.sleepIfUCan',
+    sleep_milliseconds=10, # 프로그램 실행 중지 시간(대기시간) : 대량의 요청으로 많은 트랙픽이 발생하므로
+    lang='ko', # 언어
+    country='kr', # 국가
+    sort=Sort.MOST_RELEVANT, # 정렬(관련성, 최신 등 가능)
+    filter_score_with=None # 별점 필터 None : 모든 별점을 뜻함
+)
+```
+
+**크롤링 데이터 저장**
+
+```
+import pandas as pd
+# result=pd.DataFrame(result)
+# result.to_excel('딜라이트_구글앱리뷰.xlsx', engine='xlsxwriter')
+
+import jpype
+import asposecells
+jpype.startJVM()
+from asposecells.api import Workbook, SaveFormat
+# !pip install openpyxl
+
+
+# Create a Workbook object with Excel file's path
+workbook =  Workbook("딜라이트_구글앱리뷰.xlsx")
+
+# Save XLSX as CSV
+workbook.save("dromm_google.csv" , SaveFormat.CSV)
+
+df = pd.read_csv('dromm_google.csv')
+```
+
+
 **웹크롤링으로 수집한 리뷰 데이터 파일**   
 * dromm_google.csv (리뷰 데이터)
 
 ``` 
 import pandas as pd
 
-df = pd.read_csv('/content/drive/MyDrive/Colab Notebooks/dromm_google.csv')
+df = pd.read_csv('dromm_google.csv')
 ```
 
 <br>
