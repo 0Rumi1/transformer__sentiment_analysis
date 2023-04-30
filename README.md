@@ -38,7 +38,8 @@
 ## 데이터 구조
 
 * [데이터 출처](https://play.google.com/store/apps/details?id=droom.sleepIfUCan&hl=ko&gl=US) : 구글플레이 앱
-* 2018.01 ~ 2023.04 의 리뷰 데이터 크롤링
+* 2018.01 ~ 2023.04 의 구글 플레이 앱 스토어 리뷰 크롤링
+* dromm_google.csv (리뷰 데이터)
 
 |userName|content|score|thumbsUpCount|reviewCreatedVersion|at|replyContent|
 |------|---|---|---|---|---|---|
@@ -89,39 +90,13 @@ from sklearn.metrics import confusion_matrix
 
 ## 사용법
 
-**이미지 zip 파일 압축 해제**   
-압축 파일의 위치(구글 드라이브 - 내 드라이브 위치)   
+**웹크롤링으로 수집한 리뷰 데이터 파일**   
+* dromm_google.csv (리뷰 데이터)
 
 ``` 
-from transformers import PreTrainedTokenizerFast
-from transformers import BartForConditionalGeneration
 import pandas as pd
-import torch
 
-tokenizer = PreTrainedTokenizerFast.from_pretrained('digit82/kobart-summarization')
-model = BartForConditionalGeneration.from_pretrained('digit82/kobart-summarization')
-tokenizer = PreTrainedTokenizerFast.from_pretrained('digit82/kobart-summarization')
-```
-
-```
-def generate_summary(text):
-        raw_input_ids = tokenizer.encode(text)
-        input_ids = [tokenizer.bos_token_id] + raw_input_ids + [tokenizer.eos_token_id]
-        summary_ids = model.generate(torch.tensor([input_ids]), num_beams=5, max_length=1024, no_repeat_ngram_size=2)
-        return tokenizer.decode(summary_ids.squeeze().tolist(), skip_special_tokens=True)
-```
-
-
-# confusion matrix
-```
-from sklearn.metrics import confusion_matrix
-
-confu = confusion_matrix(y_true = y_test, y_pred = y_pred)
-
-plt.figure(figsize=(4, 3))
-sns.heatmap(confu, annot=True, annot_kws={'size':15}, cmap='OrRd', fmt='.10g')
-plt.title('Confusion Matrix')
-plt.show()
+df = pd.read_csv('/content/drive/MyDrive/Colab Notebooks/dromm_google.csv')
 ```
 
 <br>
